@@ -4093,7 +4093,12 @@ def test_wrapped_mamba_group_requires_block_zeroing():
     assert config.needs_kv_cache_zeroing
 
 
-def _spec_decode_grouping_config(method="dspark", model_type=None):
+def _spec_decode_grouping_config(
+    method="dspark",
+    model_type=None,
+    num_hidden_layers=4,
+    draft_num_hidden_layers=1,
+):
     """Grouping config with an EAGLE-family speculative method enabled."""
     return SimpleNamespace(
         scheduler_config=SimpleNamespace(disable_hybrid_kv_cache_manager=False),
@@ -4102,9 +4107,15 @@ def _spec_decode_grouping_config(method="dspark", model_type=None):
                 is_block_outermost=True
             )
         ),
-        model_config=SimpleNamespace(hf_config=SimpleNamespace(model_type=model_type)),
+        model_config=SimpleNamespace(
+            hf_config=SimpleNamespace(model_type=model_type),
+            get_total_num_hidden_layers=lambda: num_hidden_layers,
+        ),
         speculative_config=SimpleNamespace(
             method=method,
+            draft_model_config=SimpleNamespace(
+                get_total_num_hidden_layers=lambda: draft_num_hidden_layers
+            ),
             use_eagle=lambda: True,
             use_eagle_block_drop=lambda: True,
         ),
@@ -4206,6 +4217,46 @@ def test_no_warning_when_draft_group_is_identified(caplog_vllm):
         _spec_decode_grouping_config(), _hybrid_specs_with_draft(draft=True)
     )
 
+    assert "could be identified as the draft model's" not in caplog_vllm.text
+
+
+def test_dflash_draft_groups_annotated_on_hybrid_path(caplog_vllm):
+    specs = {
+        "model.layers.0.linear_attn": new_mamba_spec(mamba_cache_mode="align"),
+        "model.layers.1.linear_attn": new_mamba_spec(mamba_cache_mode="align"),
+        "model.layers.2.linear_attn": new_mamba_spec(mamba_cache_mode="align"),
+        "model.layers.3.self_attn.attn": new_kv_cache_spec(),
+        "model.layers.4.linear_attn": new_mamba_spec(mamba_cache_mode="align"),
+        "model.layers.5.linear_attn": new_mamba_spec(mamba_cache_mode="align"),
+        "model.layers.6.linear_attn": new_mamba_spec(mamba_cache_mode="align"),
+        "model.layers.7.self_attn.attn": new_kv_cache_spec(),
+        # DFlash assigns draft layers indices after all target layers. Use two
+        # attention types to ensure every draft group is identified.
+        "model.layers.8.self_attn.attn": new_kv_cache_spec(),
+        "model.layers.9.self_attn.attn": new_sliding_window_spec(sliding_window=128),
+    }
+    draft_layers = {
+        "model.layers.8.self_attn.attn",
+        "model.layers.9.self_attn.attn",
+    }
+
+    groups = get_kv_cache_groups(
+        _spec_decode_grouping_config(
+            method="dflash",
+            num_hidden_layers=8,
+            draft_num_hidden_layers=2,
+        ),
+        specs,
+    )
+
+    for group in groups:
+        contains_draft = bool(draft_layers.intersection(group.layer_names))
+        assert group.is_eagle_group is contains_draft
+        if any(
+            isinstance(spec, MambaSpec)
+            for spec in iter_layer_specs(group.kv_cache_spec)
+        ):
+            assert not group.is_eagle_group
     assert "could be identified as the draft model's" not in caplog_vllm.text
 
 

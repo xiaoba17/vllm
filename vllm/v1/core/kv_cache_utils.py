@@ -2132,6 +2132,29 @@ def _is_deepseek_v4_eagle(vllm_config: VllmConfig) -> bool:
     )
 
 
+def _get_dflash_draft_layer_names(
+    vllm_config: VllmConfig,
+    kv_cache_spec: dict[str, KVCacheSpec],
+) -> set[str]:
+    """Return DFlash KV layers identified by their assigned layer indices."""
+    spec_config = vllm_config.speculative_config
+    if spec_config is None or spec_config.method != "dflash":
+        return set()
+    draft_model_config = spec_config.draft_model_config
+    if draft_model_config is None:
+        return set()
+
+    from vllm.model_executor.models.utils import extract_layer_index
+
+    draft_start = vllm_config.model_config.get_total_num_hidden_layers()
+    draft_end = draft_start + draft_model_config.get_total_num_hidden_layers()
+    return {
+        layer_name
+        for layer_name in kv_cache_spec
+        if draft_start <= extract_layer_index(layer_name) < draft_end
+    }
+
+
 def _annotate_eagle_groups(
     vllm_config: VllmConfig,
     kv_cache_spec: dict[str, KVCacheSpec],
@@ -2140,16 +2163,19 @@ def _annotate_eagle_groups(
 ) -> None:
     """Flag the KV cache groups that hold drafter attention layers.
 
-    Two detection rules, in order of preference:
+    Three detection rules, in order of preference:
 
-    1. Spec-driven. ``non_causal_multi_token_decode`` is declared on
+    1. DFlash layer indices. DFlash assigns every draft layer an index after
+       all target layers, which identifies every draft group even when its
+       attention spec is identical to the target's.
+    2. Spec-driven. ``non_causal_multi_token_decode`` is declared on
        MLAAttentionSpec and set by drafter attention layers that run a
        non-causal multi-token decode (today only Kimi-K3 DSpark). It survives
        MLAAttentionSpec.merge, so it still identifies a group after per-group
        spec merging, wherever grouping happens to land. It is sufficient but
        not necessary: a drafter whose spec is indistinguishable from the
        target's cannot be found this way.
-    2. Model-scoped positional fallback for DeepseekV4/V4.1, whose MTP block
+    3. Model-scoped positional fallback for DeepseekV4/V4.1, whose MTP block
        reuses the target's own decoder layer and so carries no spec marker. Its
        draft attention layer is always the last registered layer, so flag whichever
        group holds it. This rule is only valid where the groups partition
@@ -2162,17 +2188,18 @@ def _annotate_eagle_groups(
     Args:
         vllm_config: Config supplying the speculative method, if any.
         kv_cache_spec: The kv cache spec of each attention layer, in layer
-            registration order. Only read by rule 2.
+            registration order. Read by rules 1 and 3.
         kv_cache_groups: Groups to annotate in place.
-        use_deepseek_v4_fallback: Enable rule 2 for a DeepseekV4/V4.1 packed
+        use_deepseek_v4_fallback: Enable rule 3 for a DeepseekV4/V4.1 packed
             group.
     """
     spec_config = vllm_config.speculative_config
     if spec_config is None or not spec_config.use_eagle_block_drop():
         return
 
+    dflash_draft_layers = _get_dflash_draft_layer_names(vllm_config, kv_cache_spec)
     for group in kv_cache_groups:
-        if any(
+        if dflash_draft_layers.intersection(group.layer_names) or any(
             getattr(spec, "non_causal_multi_token_decode", False)
             for spec in iter_layer_specs(group.kv_cache_spec)
         ):
