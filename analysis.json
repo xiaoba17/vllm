@@ -1,0 +1,204 @@
+{
+  "full-read-tp1": {
+    "commit": "a99a46153a3b13034339b32942773b44d0cb651d",
+    "fs_read_bytes": 4046848,
+    "load_before": 4046848,
+    "load_after": 8257536,
+    "phases": {
+      "cold": {
+        "max_abs_logprob_delta": 0.0028738975524902344,
+        "argmax_changes": [],
+        "hit_requests": 240
+      },
+      "reload": {
+        "max_abs_logprob_delta": 0.0028738975524902344,
+        "argmax_changes": [],
+        "hit_requests": 240
+      }
+    }
+  },
+  "full-read-tp2": {
+    "commit": "a99a46153a3b13034339b32942773b44d0cb651d",
+    "fs_read_bytes": 4046848,
+    "load_before": 8093696,
+    "load_after": 16515072,
+    "phases": {
+      "cold": {
+        "max_abs_logprob_delta": 0.001476287841796875,
+        "argmax_changes": [],
+        "hit_requests": 240
+      },
+      "reload": {
+        "max_abs_logprob_delta": 0.0014734268188476562,
+        "argmax_changes": [],
+        "hit_requests": 240
+      }
+    }
+  },
+  "replica-read-tp1": {
+    "commit": "3172b52d123acf1bea4f78313089d58354e9ac3a",
+    "fs_read_bytes": 2314240,
+    "load_before": 1884160,
+    "load_after": 3768320,
+    "phases": {
+      "cold": {
+        "max_abs_logprob_delta": 0.0038352012634277344,
+        "argmax_changes": [],
+        "hit_requests": 240
+      },
+      "reload": {
+        "max_abs_logprob_delta": 0.0038352012634277344,
+        "argmax_changes": [],
+        "hit_requests": 240
+      }
+    }
+  },
+  "replica-read-tp2": {
+    "commit": "3172b52d123acf1bea4f78313089d58354e9ac3a",
+    "fs_read_bytes": 2314240,
+    "load_before": 3768320,
+    "load_after": 7536640,
+    "phases": {
+      "cold": {
+        "max_abs_logprob_delta": 0.0014853477478027344,
+        "argmax_changes": [],
+        "hit_requests": 240
+      },
+      "reload": {
+        "max_abs_logprob_delta": 0.0014853477478027344,
+        "argmax_changes": [],
+        "hit_requests": 240
+      }
+    }
+  },
+  "sharded-read-tp1": {
+    "commit": "3172b52d123acf1bea4f78313089d58354e9ac3a",
+    "fs_read_bytes": 4628480,
+    "load_before": 3768320,
+    "load_after": 7536640,
+    "phases": {
+      "cold": {
+        "max_abs_logprob_delta": 0.0014801025390625,
+        "argmax_changes": [
+          {
+            "index": 131,
+            "margin": 0.00048828125
+          }
+        ],
+        "hit_requests": 240
+      },
+      "reload": {
+        "max_abs_logprob_delta": 0.0014801025390625,
+        "argmax_changes": [
+          {
+            "index": 131,
+            "margin": 0.00048828125
+          }
+        ],
+        "hit_requests": 240
+      }
+    }
+  },
+  "sharded-read-tp2": {
+    "commit": "3172b52d123acf1bea4f78313089d58354e9ac3a",
+    "fs_read_bytes": 4628480,
+    "load_before": 3768320,
+    "load_after": 7536640,
+    "phases": {
+      "cold": {
+        "max_abs_logprob_delta": 0.0014982223510742188,
+        "argmax_changes": [
+          {
+            "index": 131,
+            "margin": 0.00048828125
+          }
+        ],
+        "hit_requests": 240
+      },
+      "reload": {
+        "max_abs_logprob_delta": 0.0014982223510742188,
+        "argmax_changes": [
+          {
+            "index": 131,
+            "margin": 0.00048828125
+          }
+        ],
+        "hit_requests": 240
+      }
+    }
+  },
+  "stress-tp2": {
+    "cold": {
+      "max_abs_logprob_delta": 0.0035767555236816406,
+      "argmax_changes": [],
+      "hit_requests": 235
+    },
+    "reload": {
+      "max_abs_logprob_delta": 0.0017409324645996094,
+      "argmax_changes": [],
+      "hit_requests": 234
+    },
+    "cycles": [
+      {
+        "cycle": 0,
+        "max_logprob_delta": 0.0012340545654296875,
+        "fs_read_bytes": 3842048,
+        "load_bytes": 2490368,
+        "hit_requests": 234,
+        "requests": 240
+      },
+      {
+        "cycle": 1,
+        "max_logprob_delta": 0.0012340545654296875,
+        "fs_read_bytes": 3891200,
+        "load_bytes": 2490368,
+        "hit_requests": 234,
+        "requests": 240
+      },
+      {
+        "cycle": 2,
+        "max_logprob_delta": 0.0012340545654296875,
+        "fs_read_bytes": 3809280,
+        "load_bytes": 2490368,
+        "hit_requests": 235,
+        "requests": 240
+      },
+      {
+        "cycle": 3,
+        "max_logprob_delta": 0.0012340545654296875,
+        "fs_read_bytes": 3657728,
+        "load_bytes": 2490368,
+        "hit_requests": 235,
+        "requests": 240
+      },
+      {
+        "cycle": 4,
+        "max_logprob_delta": 0.0015010833740234375,
+        "fs_read_bytes": 3801088,
+        "load_bytes": 2424832,
+        "hit_requests": 235,
+        "requests": 240
+      },
+      {
+        "cycle": 5,
+        "max_logprob_delta": 0.0012340545654296875,
+        "fs_read_bytes": 3809280,
+        "load_bytes": 2490368,
+        "hit_requests": 235,
+        "requests": 240
+      }
+    ]
+  },
+  "read-after-stress-tp1": {
+    "cold": {
+      "max_abs_logprob_delta": 0.0011143684387207031,
+      "argmax_changes": [],
+      "hit_requests": 240
+    },
+    "reload": {
+      "max_abs_logprob_delta": 0.0011143684387207031,
+      "argmax_changes": [],
+      "hit_requests": 240
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "fix": {
+    "commit": "a99a46153a3b13034339b32942773b44d0cb651d",
+    "files": {
+      "tests/v1/kv_connector/unit/offloading_connector/test_canonical_mapping.py": "5251e3cb8d416af2a4b42ba4777ddf608adabeac1fb88ff4891880c1912fdaaa",
+      "tests/v1/kv_connector/unit/offloading_connector/test_config.py": "16c92ec857d9cc9dd88347a97aafffb8c32e0cbc27eb0f558a1eb2124abdd4a0",
+      "tests/v1/kv_connector/unit/offloading_connector/test_scheduler.py": "e163438bf437323ba6aafb9bd7fbb92b4e4ec0580d65215aea1b9a06a562509b",
+      "tests/v1/kv_connector/unit/offloading_connector/test_worker.py": "7663f4cdbecdd91bcab36e1da2a6f4cac1b6631b7dc24b018f6675ef926c127e",
+      "vllm/distributed/kv_transfer/kv_connector/v1/offloading/config.py": "ccb10df1641c8cca7ebc3fc5e2af29eb14c1aaa5b7ef645b7bc478785474d8e4",
+      "vllm/v1/kv_offload/config.py": "cfd8229acd913355a579eef39996b5207cb1c6c5e32b6f31f0e51b5cb01718d8",
+      "vllm/v1/kv_offload/cpu/spec.py": "469097eabb300e0a5c4f909bb138efe2cd007fabb3d744d7ad24aa9d95d6fc65",
+      "vllm/v1/kv_offload/tiering/spec.py": "ae9a92e7163c5c9bb79920b8fcb12007ae0a975b4aaad84b02be301009c0af97"
+    }
+  },
+  "feature": {
+    "commit": "3172b52d123acf1bea4f78313089d58354e9ac3a",
+    "files": {
+      "tests/v1/kv_connector/unit/offloading_connector/test_canonical_mapping.py": "49f6c38427797a4e25289d1dfbe88b0fd99d34d8e907e313e94c10407e987682",
+      "tests/v1/kv_connector/unit/offloading_connector/test_config.py": "87cdedb5250e59573bfbc20f25cb3a149243258b0d2d52cae49a90f24e148e11",
+      "tests/v1/kv_connector/unit/offloading_connector/test_scheduler.py": "628acb2fabb98d52ca915ecf8722cef8be2630efa7669a34a08bae26f7e9e343",
+      "tests/v1/kv_connector/unit/offloading_connector/test_worker.py": "fe7d18b95caf27cbb4bd21bffaf5eb78c1252c03198da2f1eacb29efe68e51de",
+      "vllm/distributed/kv_transfer/kv_connector/v1/offloading/config.py": "a2cd58df7821d42608145a85700ce59cfb02e01d35eb79367fbcd8288bb50642",
+      "vllm/v1/kv_offload/config.py": "cfd8229acd913355a579eef39996b5207cb1c6c5e32b6f31f0e51b5cb01718d8",
+      "vllm/v1/kv_offload/cpu/spec.py": "469097eabb300e0a5c4f909bb138efe2cd007fabb3d744d7ad24aa9d95d6fc65",
+      "vllm/v1/kv_offload/tiering/spec.py": "ae9a92e7163c5c9bb79920b8fcb12007ae0a975b4aaad84b02be301009c0af97"
+    }
+  }
+}

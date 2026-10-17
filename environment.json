@@ -1,0 +1,12 @@
+{
+  "python": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+  "platform": "Linux-5.15.0-187-generic-x86_64-with-glibc2.39",
+  "packages": {
+    "torch": "2.14.0",
+    "torchvision": "0.29.0",
+    "transformers": "5.16.1",
+    "triton": "3.8.0",
+    "vllm": "0.32.0rc1.dev292+g8e25bbca1",
+    "flashinfer-python": "0.7.2"
+  }
+}
